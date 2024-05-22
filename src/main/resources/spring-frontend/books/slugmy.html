@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Тут название страницы написать</title>
+    <meta name="description" content="Описание страницы">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Medium.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-ExtraBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/fonts.min.css?v=79103183">
+    <link rel="stylesheet" href="/assets/css/basic.min.css?v=79103183">
+    <link rel="stylesheet" href="/assets/css/extra.min.css?v=79103183">
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script defer src="/assets/js/scripts.min.js?v=79103183"></script>
+    <script th:replace="~{fragments/script}"></script>
+</head>
+<body class="Site">
+<header class="Header" th:replace="~{fragments/common_header_fragment :: head(status= ${curUsr} ? 'authorized' : 'unauthorized', curUsr=${curUsr})}"></header>
+<div class="Middle">
+    <div class="wrap">
+        <main class="Middle-main">
+            <ul class="breadcrumbs"
+                th:replace="~{fragments/breadcrumb_fragment :: breadcrumps(category=${exactBook.title})}"></ul>
+            <div class="Product">
+                <div class="ProductCard">
+                    <div class="ProductCard-look">
+                        <div class="ProductCard-photo"><img th:src = "${exactBook.image}"
+                                                            src="/assets/img/content/main/card.jpg"
+                                                            alt="card.jpg"/>
+                        </div>
+                    </div>
+                    <div class="ProductCard-desc" th:replace="~{fragments/book_description_fragment :: head(exactBook=${exactBook}, bookRating=${bookRating})}"></div>
+                </div>
+                <div class="Product-comments">
+                    <div class="Product-comments-header">
+                        <h3 class="Product-comments-title">Отзывы
+                        </h3>
+                        <span class="Product-comments-amount" th:if="${bookReviews.getTotalElements()} % 10 == 1
+                                                                         and ${bookReviews.getTotalElements()} != 11"
+                              th:text="${bookReviews.getTotalElements()} + ' отзыв'">567 отзывов</span>
+                        <span class="Product-comments-amount" th:if="${bookReviews.getTotalElements()} % 10 > 1
+                                                                         and ${bookReviews.getTotalElements()} % 10 < 5
+                                                                         and ${bookReviews.getTotalElements()} != 12
+                                                                         and ${bookReviews.getTotalElements()} != 13
+                                                                         and ${bookReviews.getTotalElements()} != 14"
+                              th:text="${bookReviews.getTotalElements()} + ' отзыва'">567 отзывов</span>
+                        <span class="Product-comments-amount" th:if="${bookReviews.getTotalElements()} % 10 < 1
+                                                                         or ${bookReviews.getTotalElements()} % 10 > 4
+                                                                         or (${bookReviews.getTotalElements()} > 10
+                                                                         and ${bookReviews.getTotalElements()} < 15)"
+                              th:text="${bookReviews.getTotalElements()} + ' отзывов'">567 отзывов</span>
+                    </div>
+                </div>
+                <strong class="Comments-title">Написать отзыв
+                </strong>
+                <div class="Comments-addComment">
+                    <form class="form" action="#" method="post" data-bookid="1111" th:attr="data-bookid=${exactBook.slug}">
+                        <div class="form-group">
+                                <textarea class="form-textarea Comments-review" name="review" id="review"
+                                          placeholder="Текст отзыва" data-validate="require"></textarea>
+                        </div>
+                        <div class="form-group Comments-sendReview">
+                            <button class="btn btn_warning" type="submit">Отправить отзыв
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div th:replace="~{fragments/book_reviews_fragment :: head(bookReviews= ${bookReviews}, slug=${exactBook.slug})}"></div>
+            </div>
+        </main>
+    </div>
+</div>
+<footer class="Footer" th:replace="~{fragments/common_footer_fragment :: footer}"></footer>
+<script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
+</body>
+</html>

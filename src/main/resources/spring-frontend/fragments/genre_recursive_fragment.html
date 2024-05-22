@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <section th:fragment="menu">
+        <th:block th:each="genre : ${customGenres}" >
+            <div class="Tags Tags_embed" th:if="${genre.parent} == null">
+                <div class="Tags-title">
+                    <div class="Tag">
+                        <a th:href="'/genres/'+${genre.slug}" th:text="${genre.name}+' ('+${genre.retrieveRate()}+')'">
+                        </a>
+                    </div>
+                </div>
+                <th:block th:include="~{fragments/genre_recursive_fragment :: menu}" th:with="customGenres=${genre.children}"></th:block>
+            </div>
+            <div class="Tags" th:if="${genre.parent} != null and ${genre.children.size()} != 0">
+                <div class="Tags-title">
+                    <div class="Tag">
+                        <a th:href="'/genres/'+${genre.slug}" th:text="${genre.name}+' ('+${genre.retrieveRate()}+')'">
+                        </a>
+                    </div>
+                </div>
+                <th:block th:include="~{fragments/genre_recursive_fragment :: menu}" th:with="customGenres=${genre.children}"></th:block>
+            </div>
+            <div class="Tag" th:if="${genre.children.size()} == 0">
+                <a th:href="'/genres/'+${genre.slug}" th:text="${genre.name}+' ('+${genre.retrieveRate()}+')'">
+                </a>
+            </div>
+        </th:block>
+    </section>
+</html>
